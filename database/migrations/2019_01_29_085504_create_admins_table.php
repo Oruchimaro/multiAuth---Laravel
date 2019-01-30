@@ -20,6 +20,7 @@ class CreateAdminsTable extends Migration
             $table->string('job_title');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

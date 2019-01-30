@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -34,6 +35,22 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+
+        $this->middleware('guest')->except(['logout' , 'userLogout']);
     }
+
+        //this fucntions shows loging out as an user.it works like default logout function inside "Illuminate\Foundation\Auth\AuthenticatesUsers"
+        //we will name this one "userlogout" if not it will overrwrite the one in the file mentioned above
+        public function userLogout()
+        {
+            Auth::guard('web')->logout();
+    
+            /**
+             * if you unrem this line it will invalid the entire session,means if you are 
+             * logged in as both admin and user at same time it will kick u out of both 
+             */
+            // $request->session()->invalidate();
+    
+            return redirect('/');
+        }
 }
