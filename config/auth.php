@@ -45,6 +45,17 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+        /**
+         * we will use this as a guard for admins
+         */
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'admin-api' => [
+            'driver' => 'token',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -69,6 +80,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+        /**
+         * we use this provider to tell the admin guard how to talk to database
+         */
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -90,12 +108,19 @@ return [
     | they have less time to be guessed. You may change this as needed.
     |
     */
-
+    /**cause we can share password reset table accross all models there is no need
+     * to make one for each type of user
+     */
     'passwords' => [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 15,
         ],
     ],
 

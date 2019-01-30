@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +47,38 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        /**
+         * when you run "Authenticate middleware" and youre not 
+         * authenticated it throws an exeption to redirect you to login page
+         * and it is handeled here,so we can edit the code here instead of meesing with in inside
+         * the "config" folder,there is just a problem ,in previous versions of "laravel" we could 
+         * actully see an "Authentication Exeption Model" inside a method called"unauthenticated"
+         * but in this version there is no such thing so we should make clear that it is an instance of
+         * the  "Authentication Exeption Model",we will do it inide of an "if" like below and dont 
+         * forget the fucking (use Illuminate\Auth\AuthenticationException;)
+         */
+
+        if ($exception instanceof AuthenticationException)
+        {
+            /**
+             *we should extract the guard from the $exception that is a collection
+                *but we need the first item that is guard.
+                */
+            $guard = array_get($exception->guards(),0);
+
+            //switchcase on guard for the admin and default as the normal user.
+            switch ($guard)
+            {
+                case 'admin':
+                    $login = 'admin.login';
+                    break;
+                default:
+                    $login = 'login';
+                    break;
+            }//end"switch
+            return redirect()->guest(route($login));
+        }//end"ifstatment
+
         return parent::render($request, $exception);
     }
 }

@@ -12,6 +12,11 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
+    /**
+     * when you run "Authenticate middleware" and youre not 
+     * authenticated it throws an exeption to redirect you to login page
+     * and it is handeled in 'App/Exceptions/handler.php
+     */
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
