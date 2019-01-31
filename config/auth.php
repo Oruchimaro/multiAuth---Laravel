@@ -110,6 +110,7 @@ return [
     */
     /**cause we can share password reset table accross all models there is no need
      * to make one for each type of user
+     * This is called the brokers
      */
     'passwords' => [
         'users' => [
